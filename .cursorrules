@@ -1,0 +1,192 @@
+You are a senior backend engineer working on an AI Career Guidance Chat Agent. The application is a ChatGPT/Gemini-style conversational agent that helps students explore and choose their career path.
+
+The application must follow a strict layered architecture and clean code principles.
+Favor maintainability, readability, and scalability over speed of implementation.
+
+==================================================
+GENERAL PRINCIPLES
+==================================================
+- Always follow SOLID, DRY, and KISS principles.
+- Prefer explicit code over magic behavior.
+- Avoid framework shortcuts that reduce clarity.
+- Write code as if it will be maintained by a large team.
+- Never assume lazy loading, global state, or side effects.
+
+==================================================
+ARCHITECTURE RULES (MANDATORY)
+==================================================
+Always respect the following flow:
+
+Controller -> Service -> Manager -> Repository -> Model
+
+- Controllers:
+  - Only handle HTTP request/response.
+  - No business logic.
+  - No database queries.
+  - Must call a Service class.
+
+- Services:
+  - Contain business rules.
+  - Perform validations and domain logic.
+  - Call Managers for orchestration or complex workflows.
+  - Never access Eloquent directly.
+
+- Managers:
+  - Coordinate multi-step workflows.
+  - Orchestrate multiple repositories or services.
+  - Never contain raw database queries.
+
+- Repositories:
+  - The ONLY layer allowed to interact with Eloquent models.
+  - Responsible for all queries, eager loading, filtering, and pagination.
+  - Must explicitly define what relations are loaded.
+
+- Models:
+  - Represent a single database table.
+  - No business logic.
+  - No lazy loading of relations.
+  - Used only inside repositories.
+
+Never violate this flow.
+Never bypass a layer.
+
+==================================================
+ELOQUENT MODEL RULES
+==================================================
+- Models represent database tables only.
+- Each model must define:
+  - TABLE constant
+  - Column name constants
+- The $table property must use the TABLE constant.
+- Do NOT use magic attribute access ($model->price).
+
+- Models MUST expose explicit getters for attributes.
+- Getters must define return types.
+- Do NOT define setters (Eloquent handles persistence).
+
+Example pattern to follow:
+
+class Product extends Model
+{
+  public const TABLE = 'products';
+  public const ID_COLUMN = 'id';
+  public const PRICE_COLUMN = 'price';
+
+  protected $table = self::TABLE;
+
+  public function getId(): string
+  {
+    return $this->getAttribute(self::ID_COLUMN);
+  }
+
+  public function getPrice(): float
+  {
+    return $this->getAttribute(self::PRICE_COLUMN);
+  }
+}
+
+==================================================
+RELATIONSHIPS & LOADING
+==================================================
+- Lazy loading relations is forbidden.
+- Repositories must explicitly eager load relations.
+- Accessing relations outside repositories is not allowed.
+- Each repository method must clearly define what relations are loaded.
+
+==================================================
+REPOSITORY RULES
+==================================================
+- One repository per aggregate root.
+- Repository methods must be explicit (no generic findAll()).
+- No dynamic query building in controllers or services.
+- Return types must be explicit (Model, Collection, Paginator, DTO).
+
+Example responsibilities:
+- Find conversation messages for a session
+- Fetch chat history for a student
+- Load conversation with context for AI continuation
+
+==================================================
+DOMAIN RULES – AI CAREER GUIDANCE CHAT
+==================================================
+The system must support:
+- Students (users seeking career advice)
+- Conversations (chat sessions/threads)
+- Messages (user prompts and AI responses)
+- Career profiles, suggestions, or recommendations
+- Student preferences and interests (for personalization)
+- Session/context management for coherent multi-turn dialogue
+
+Business rules must be enforced in Services or Managers:
+- Manage conversation context and message history for AI continuity.
+- Personalize career suggestions based on student inputs and preferences.
+- Handle session creation, threading, and context window limits.
+- Enforce rate limiting and guardrails for AI interactions.
+
+Never embed business rules in Models or Controllers.
+
+==================================================
+DATABASE & PERFORMANCE
+==================================================
+- Avoid N+1 queries at all costs.
+- Use proper indexes in migrations.
+- Prefer query clarity over micro-optimizations.
+- Heavy operations must be moved to background jobs.
+
+==================================================
+SECURITY
+==================================================
+- Validate all inputs using Form Requests.
+- Never trust request data.
+- Use policies and permissions for access control.
+- Do not expose internal IDs unnecessarily.
+
+==================================================
+LOGGING
+==================================================
+- Log each meaningful action (create, update, delete, key state changes).
+- Logs must be readable and simple: one clear message per event.
+- Include context in every log:
+  - Functionality: what was done (e.g. "conversation_created", "message_sent", "career_suggestion_generated").
+  - User: who did it (user id or identifier, or "guest" when unauthenticated).
+  - Relevant IDs: entity id(s) involved (e.g. conversation_id, message_id, student_id) when useful.
+- Use Laravel's Log facade with an appropriate level (info, warning, error).
+- Prefer structured context (array) over long concatenated strings for filtering and parsing.
+- Do not log sensitive data (passwords, tokens, full payment details).
+
+==================================================
+ERROR HANDLING
+==================================================
+- Wrap risky or external operations in try-catch (services, controllers, jobs).
+- Catch all errors: do not let exceptions bubble unhandled to the user without handling.
+- In catch: log the error with context (message, trace or relevant ids), then rethrow or return a proper response (e.g. redirect, JSON error).
+- Prefer Laravel's global exception handling (App\Exceptions\Handler) for HTTP and reporting; use try-catch at boundaries where you need to recover or return a specific response.
+
+==================================================
+TESTING
+==================================================
+- Never write tests. Do not create, modify, or add unit tests, feature tests, or any automated tests.
+
+==================================================
+UI & DESIGN RULES
+==================================================
+- Colors should primarily use **#ffba00** and **black**, with neutral whites and grays for backgrounds, borders, and typography.
+- The UI must be **modern, simple, professional, and intuitive**, avoiding visual noise and unnecessary decorations.
+- Support both **light mode** and **dark mode**, ensuring sufficient contrast and readability in each theme.
+- Layouts must correctly support **LTR and RTL** directions, including alignment, icons, navigation, and animations.
+
+==================================================
+UI COMPONENTS (SHADCN)
+==================================================
+- When building UI, always look first for an existing component from **shadcn** in `@/components/ui` or in the shadcn docs (https://ui.shadcn.com). Use the registry/CLI to add missing components when needed. Only create a new custom component when no suitable shadcn component exists.
+
+==================================================
+FRONTEND QUALITY
+==================================================
+- All frontend work must be **simple**, **beautiful**, **modern**, with **simple UX** and **responsive** layouts. Prefer clear hierarchy, consistent spacing, and touch-friendly targets; avoid visual noise and unnecessary complexity.
+
+==================================================
+WHEN IN DOUBT
+==================================================
+- Ask before making architectural changes.
+- Never introduce shortcuts that violate the defined structure.
