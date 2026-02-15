@@ -31,9 +31,9 @@ export function ConversationListItem({
             type="button"
             onClick={onClick}
             className={cn(
-                'flex w-full flex-col gap-0.5 rounded-lg px-3 py-2.5 text-start text-sm transition-colors',
+                'flex w-full flex-col gap-0.5 rounded-xl px-3 py-2.5 text-start text-sm transition-all duration-200',
                 'hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
-                isActive && 'bg-sidebar-accent text-sidebar-accent-foreground'
+                isActive && 'bg-brand-soft text-foreground font-medium shadow-sm dark:bg-brand/20'
             )}
         >
             <span className="truncate font-medium">{truncated}</span>

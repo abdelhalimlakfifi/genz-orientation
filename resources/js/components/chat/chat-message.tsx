@@ -19,10 +19,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
         >
             <Avatar
                 className={cn(
-                    'size-8 shrink-0',
+                    'size-9 shrink-0 ring-2 ring-background shadow-md',
                     isUser
-                        ? 'bg-brand text-brand-foreground'
-                        : 'bg-muted text-muted-foreground'
+                        ? 'bg-gradient-to-br from-brand to-brand-glow text-brand-foreground'
+                        : 'bg-muted/80 text-muted-foreground dark:bg-muted'
                 )}
             >
                 <AvatarFallback>
@@ -31,10 +31,10 @@ export function ChatMessage({ message }: ChatMessageProps) {
             </Avatar>
             <div
                 className={cn(
-                    'rounded-xl px-4 py-2.5 max-w-[85%] text-sm leading-relaxed',
+                    'rounded-2xl px-4 py-3 max-w-[85%] text-sm leading-relaxed shadow-sm',
                     isUser
-                        ? 'bg-brand text-brand-foreground ms-auto'
-                        : 'bg-muted text-foreground'
+                        ? 'ms-auto bg-gradient-to-br from-brand to-brand-glow text-brand-foreground'
+                        : 'border border-border/60 bg-chat-surface text-foreground dark:bg-card/80'
                 )}
             >
                 <p className="whitespace-pre-wrap">{message.content}</p>

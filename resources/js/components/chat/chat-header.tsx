@@ -20,21 +20,23 @@ export function ChatHeader({ leftSlot }: ChatHeaderProps) {
     const user = auth?.user as User | null | undefined;
 
     return (
-        <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-border bg-background px-4">
-            <div className="flex items-center gap-2">
+        <header className="flex h-14 shrink-0 items-center justify-between gap-4 border-b border-border/60 bg-background/80 px-4 backdrop-blur-md dark:bg-background/60">
+            <div className="flex items-center gap-3">
                 {leftSlot}
-                <Link href={home()} className="flex items-center gap-2" prefetch>
-                    <span className="font-semibold text-foreground">
-                        Orientation Pro
-                    </span>
+                <Link
+                    href={home()}
+                    className="flex items-center gap-2 rounded-lg px-2 py-1.5 -mx-2 font-semibold text-foreground transition-colors hover:bg-accent/50"
+                    prefetch
+                >
+                    Orientation Pro
                 </Link>
             </div>
-            <nav className="flex items-center gap-2">
+            <nav className="flex items-center gap-3">
                 {user ? (
                     <>
                         <Link
                             href={dashboard()}
-                            className="text-sm text-muted-foreground hover:text-foreground"
+                            className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
                         >
                             Admin
                         </Link>
@@ -58,13 +60,13 @@ export function ChatHeader({ leftSlot }: ChatHeaderProps) {
                     <>
                         <Link
                             href={login()}
-                            className="text-sm text-muted-foreground hover:text-foreground"
+                            className="rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground"
                         >
                             Connexion
                         </Link>
                         <Link
                             href={register()}
-                            className="rounded-md border border-border bg-background px-3 py-1.5 text-sm font-medium hover:bg-accent"
+                            className="rounded-xl bg-gradient-to-r from-brand to-brand-glow px-4 py-2 text-sm font-semibold text-brand-foreground shadow-md shadow-brand/20 transition-all hover:opacity-95 hover:shadow-lg hover:shadow-brand/25"
                         >
                             S&apos;inscrire
                         </Link>

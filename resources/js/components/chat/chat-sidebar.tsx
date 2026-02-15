@@ -37,7 +37,7 @@ export function ChatSidebar({
         <>
             <Button
                 variant="outline"
-                className="w-full justify-start gap-2 border-sidebar-border"
+                className="w-full justify-start gap-2 rounded-xl border-sidebar-border bg-brand-soft/50 hover:bg-brand-soft hover:border-brand/40 hover:text-foreground"
                 onClick={() => {
                     onNewChat();
                     closeSheet();
@@ -98,7 +98,7 @@ export function ChatSidebar({
     }
 
     return (
-        <aside className="flex w-64 shrink-0 flex-col border-e border-sidebar-border bg-sidebar p-4">
+        <aside className="flex w-64 shrink-0 flex-col border-e border-sidebar-border bg-sidebar/95 p-4 backdrop-blur-sm">
             {sidebarContent}
         </aside>
     );

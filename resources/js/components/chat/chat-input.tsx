@@ -35,7 +35,7 @@ export function ChatInput({
     );
 
     return (
-        <div className="border-t border-border bg-background px-4 py-4">
+        <div className="border-t border-border/60 bg-chat-surface/50 px-4 py-5 backdrop-blur-sm dark:bg-chat-surface/30">
             <div className="mx-auto flex max-w-3xl gap-3">
                 <Textarea
                     value={value}
@@ -45,8 +45,9 @@ export function ChatInput({
                     disabled={disabled}
                     rows={1}
                     className={cn(
-                        'min-h-[44px] max-h-40 resize-none py-3',
-                        'focus-visible:ring-brand/50 focus-visible:border-brand'
+                        'min-h-[48px] max-h-40 resize-none rounded-2xl border-2 py-3 shadow-sm',
+                        'focus-visible:ring-brand/40 focus-visible:border-brand focus-visible:ring-2',
+                        'bg-background/80 dark:bg-background/50'
                     )}
                 />
                 <Button
@@ -54,15 +55,17 @@ export function ChatInput({
                     onClick={handleSubmit}
                     disabled={disabled || !value.trim()}
                     className={cn(
-                        'shrink-0 self-end h-[44px] px-4',
-                        'bg-brand text-brand-foreground hover:bg-brand/90'
+                        'shrink-0 self-end h-[48px] w-12 rounded-2xl px-0',
+                        'bg-gradient-to-br from-brand to-brand-glow text-brand-foreground',
+                        'hover:opacity-95 hover:shadow-lg hover:shadow-brand/25 active:scale-95',
+                        'transition-all duration-200'
                     )}
                 >
-                    <SendHorizontal className="size-4" />
+                    <SendHorizontal className="size-5" />
                     <span className="sr-only">Envoyer</span>
                 </Button>
             </div>
-            <p className="mx-auto mt-2 max-w-3xl text-center text-xs text-muted-foreground">
+            <p className="mx-auto mt-3 max-w-3xl text-center text-xs text-muted-foreground">
                 Entrée pour envoyer, Maj+Entrée pour un retour à la ligne
             </p>
         </div>

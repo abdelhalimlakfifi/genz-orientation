@@ -21,7 +21,7 @@ export function ChatLayout({
     const [sidebarOpen, setSidebarOpen] = useState(false);
 
     return (
-        <div className="flex h-screen flex-col bg-background">
+        <div className="flex h-screen flex-col bg-chat-bg">
             <ChatHeader
                 leftSlot={
                     <ChatSidebar
